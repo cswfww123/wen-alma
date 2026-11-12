@@ -1,1 +1,0 @@
-Run the **wen-implement** skill (wen-alma plugin) on the ticket referenced in this message: fetch it via this repo's tracker config, isolate a worktree, dispatch the developer agent, then independent evaluator acceptance with the runtime-evidence gate. No runtime evidence → no close.

@@ -1,0 +1,13 @@
+{
+  "id": "wen-alma",
+  "name": "Wen Alma",
+  "version": "0.1.1",
+  "description": "wen-engineering 工程流 × Alma 内置 agents：grill 收敛需求、PRD Inventory 守门、冷启动票、隔离 context 实现 + 独立运行时证据验收",
+  "author": {
+    "name": "cswfww123",
+    "url": "https://github.com/cswfww123"
+  },
+  "engines": {
+    "alma": "^0.1.0"
+  }
+}

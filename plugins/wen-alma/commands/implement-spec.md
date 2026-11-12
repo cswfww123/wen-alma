@@ -1,1 +1,0 @@
-Run the **wen-implement-spec** skill (wen-alma plugin) on the spec referenced in this message: map the ticket graph, dispatch frontier tickets to parallel developers (disjoint edits only, one worktree each), evaluator accept + serial merge + close per ticket, then branch review and package prd-walk.

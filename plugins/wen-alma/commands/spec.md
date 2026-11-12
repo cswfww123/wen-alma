@@ -1,1 +1,0 @@
-Run the **wen-spec** skill (wen-alma plugin): synthesize this conversation into a spec — no interview. If a PRD or design pin is in play, build the PRD Inventory first and hold `accepted` until it passes. Publish to this repo's tracker and read it back.

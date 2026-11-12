@@ -1,1 +1,0 @@
-Run the **wen-grill** skill (wen-alma plugin) on the requirement in this message: classify it, sweep the repo facts (AGENTS.md router first), and open the frontier rounds with the user. Do not start implementation and do not create decision files.

@@ -21,13 +21,15 @@ wen-engineering 的工程流，移植到 Alma 内置 agents 上运行。
 
 ## 安装
 
-Plugin Marketplace → Add → Add Plugin Marketplace，粘贴本仓库地址：
+插件市场 → Install Plugin → **URL** 标签，粘贴本仓库地址：
 
 ```
 https://github.com/cswfww123/wen-alma
 ```
 
-然后 Personal → wen-alma-market → Wen Alma → Install。
+（或 **Local** 标签直接选本机路径 `/Users/apple/Develop/wen-alma`。）
+
+安装后五个技能出现在 composer 的技能选择器里，也可由模型按描述自动调用。
 
 ## 设计约定
 
@@ -37,4 +39,5 @@ https://github.com/cswfww123/wen-alma
 
 ## 版本
 
-0.1.0 — 初始版：五技能 + 五命令入口。
+- 0.1.1 — 改为 Alma 原生插件格式：根 `manifest.json` + 根级 `skills/`
+- 0.1.0 — 初始版（ZCode 格式，已废弃）
