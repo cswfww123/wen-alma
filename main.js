@@ -1,12 +1,13 @@
-// wen-alma is a skills-only plugin. Alma's plugin system and its skills
-// system are separate: plugin installation alone does not register skills.
-// On activate we symlink each skills/<name> directory into the personal
-// skills folder (~/.config/alma/skills), which the skills scanner reads
-// (it follows symlinked directories). Deactivate removes only our links.
+// wen-alma is a skills-only plugin. Alma's plugin system (manifest.json +
+// main.js, tools/commands via PluginContext) and its skills system
+// (~/.config/alma/skills, bundled, claude-code) are separate: plugin
+// installation alone does not register skills, and PluginContext has no
+// skills API. On activate we therefore symlink each skills/<name> directory
+// into the personal skills folder — the skills scanner follows symlinked
+// directories. dispose removes only links that point back into this plugin.
 //
 // The installed plugin path (~/.config/alma/plugins/wen-alma) is stable, so
-// a plugin update re-points nothing: the symlinks keep tracking the new
-// skill files automatically.
+// plugin updates need no re-pointing: links keep tracking the new files.
 
 import { mkdirSync, readdirSync, readlinkSync, rmSync, symlinkSync, existsSync, lstatSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -17,6 +18,14 @@ const PLUGIN_ROOT = dirname(fileURLToPath(import.meta.url));
 const SKILLS_SRC = join(PLUGIN_ROOT, "skills");
 const PERSONAL_SKILLS = join(homedir(), ".config", "alma", "skills");
 
+function log(logger, ...args) {
+  (logger?.info ? logger.info.bind(logger) : console.log)(...args);
+}
+
+function warn(logger, ...args) {
+  (logger?.warn ? logger.warn.bind(logger) : console.warn)(...args);
+}
+
 function linkTargetsOurPlugin(linkPath) {
   try {
     return readlinkSync(linkPath).startsWith(SKILLS_SRC);
@@ -25,15 +34,21 @@ function linkTargetsOurPlugin(linkPath) {
   }
 }
 
-export async function activate() {
-  if (!existsSync(SKILLS_SRC)) return;
+export async function activate(context) {
+  const logger = context?.logger;
+
+  if (!existsSync(SKILLS_SRC)) {
+    return { dispose() {} };
+  }
+
+  const linked = [];
 
   mkdirSync(PERSONAL_SKILLS, { recursive: true });
 
-  for (const name of readdirSync(SKILLS_SRC, { withFileTypes: true })) {
-    if (!name.isDirectory()) continue;
-    const src = join(SKILLS_SRC, name.name);
-    const dest = join(PERSONAL_SKILLS, name.name);
+  for (const entry of readdirSync(SKILLS_SRC, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const src = join(SKILLS_SRC, entry.name);
+    const dest = join(PERSONAL_SKILLS, entry.name);
 
     let existing = null;
     try {
@@ -44,28 +59,40 @@ export async function activate() {
 
     if (existing?.isSymbolicLink()) {
       if (linkTargetsOurPlugin(dest)) {
-        rmSync(dest); // refresh link (plugin path is stable, but be safe)
+        rmSync(dest); // refresh our own link
       } else {
-        console.warn(`[wen-alma] skill '${name.name}' exists as another symlink; skipping`);
+        warn(logger, `[wen-alma] skill '${entry.name}' exists as another symlink; skipping`);
         continue;
       }
     } else if (existing) {
-      console.warn(`[wen-alma] skill '${name.name}' already exists in personal skills; skipping`);
+      warn(logger, `[wen-alma] skill '${entry.name}' already exists in personal skills; skipping`);
       continue;
     }
 
     symlinkSync(src, dest, "dir");
-    console.log(`[wen-alma] linked skill '${name.name}' -> ${src}`);
+    linked.push(dest);
+    log(logger, `[wen-alma] linked skill '${entry.name}' -> ${src}`);
   }
-}
 
-export async function deactivate() {
-  if (!existsSync(PERSONAL_SKILLS)) return;
-  for (const name of readdirSync(PERSONAL_SKILLS, { withFileTypes: true })) {
-    const dest = join(PERSONAL_SKILLS, name.name);
-    if (name.isSymbolicLink() && linkTargetsOurPlugin(dest)) {
-      rmSync(dest);
-      console.log(`[wen-alma] unlinked skill '${name.name}'`);
-    }
-  }
+  return {
+    dispose() {
+      for (const dest of linked) {
+        try {
+          if (linkTargetsOurPlugin(dest)) rmSync(dest);
+        } catch {
+          // already gone
+        }
+      }
+      // Also sweep links from a previous activation that this process did
+      // not create in this run (e.g. plugin updated in place).
+      if (existsSync(PERSONAL_SKILLS)) {
+        for (const entry of readdirSync(PERSONAL_SKILLS, { withFileTypes: true })) {
+          const dest = join(PERSONAL_SKILLS, entry.name);
+          if (entry.isSymbolicLink() && linkTargetsOurPlugin(dest)) {
+            try { rmSync(dest); } catch {}
+          }
+        }
+      }
+    },
+  };
 }
