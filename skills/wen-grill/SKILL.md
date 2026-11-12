@@ -33,7 +33,11 @@ Converge user–model consensus in ONE context **before** partitioning. Every am
    - Conflict facts (one field, several live values across enums / write paths / SQL) → post a fact table (source → value → role); put the alignment target on the frontier with a recommendation. Never "code wins" silently.
    - **Self-contradicting pin** (the prototype disagrees with itself, e.g. one link blue, its neighbor grey) → surface both readings with the pin's exact source lines and let the user pick; do not silently normalize.
 
-5. **Close.** Every row answered (`按推荐` or a diff). Restate: settled table, in/out scope, what the walkthrough must prove. Same-session work stays in chat — no decision file. Handoff to other sessions/agents → decisions go **into the tickets** (wen-tickets), not a parallel rotting doc.
+5. **Close — and stop.** Every row answered (`按推荐` or a diff). Restate: settled table, in/out scope, what the walkthrough must prove. Same-session work stays in chat — no decision file. Handoff to other sessions/agents → decisions go **into the tickets** (wen-tickets), not a parallel rotting doc.
+
+   **`按推荐` / accepting the poles is NOT a build authorization.** After close this conversation does not edit production code — not a single file, not "just the small parts". Implementation runs in a **separate context** via wen-implement (a fresh thread or `/implement`). The grill context's job ends at the settled table. If you are tempted to "quickly do it yourself since everything is clear now", that is exactly the failure this boundary exists to prevent: the grilling context carries a 2000-line page's worth of attention debt plus its own recommendations as a bias, and its self-verification will pass the same gaps it created.
+   - End the turn with: settled table + in/out scope + the exact next step ("开新会话跑 wen-implement，票号 X / 需求描述 Y").
+   - Only an explicit user instruction — "就在这个会话改" — overrides this, and then the run is marked `confidence: degraded` and the user is warned once about context fatigue.
 
 ## Do not
 

@@ -11,7 +11,7 @@ One ticket, one isolated context, one worktree. The **developer** executes; the 
 
 0. **Enter.** Fetch the ticket via the repo's tracker conventions (`AGENTS.md` row → tracker doc); state its title before starting. Read what the repo's `AGENTS.md` names for code changes (LESSONS.md, code standards). Record intent: PRD path, design source, accepted `相对 PRD` deltas, the `Covers` rows. A `Covers` row whose ticket body still lists 残差 / partial → split a follow-up ticket or accept a labeled delta; closing is unavailable.
 
-1. **Isolate.** One worktree per ticket, following the repo's own worktree convention (its `AGENTS.md` / worktree skill / `~/.agents/skills/using-git-worktrees/scripts/worktree.sh new <slug>`). Never two sessions in one checkout. Record the integration branch. Docs-only or no-commit runs may stay in the main checkout.
+1. **Isolate — not optional.** One worktree per ticket, following the repo's own worktree convention (its `AGENTS.md` / worktree skill / `~/.agents/skills/using-git-worktrees/scripts/worktree.sh new <slug>`). Never two sessions in one checkout. Record the integration branch. Docs-only or no-commit runs may stay in the main checkout. **"The workspace is clean right now, I'll just edit in place" is not a valid reason to skip isolation** — the risk is the next session, not this one. In-place edits need an explicit user instruction ("原地改，别开 worktree"); absent that, the worktree is mandatory, and a run that edited in place anyway reports `confidence: degraded` + why.
 
 2. **Brief = handoff packet.** Dispatch **developer** (Task, `agent_id: developer`). Packet:
    - `goal`: final AC with literal values.
