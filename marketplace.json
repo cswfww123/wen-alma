@@ -1,0 +1,15 @@
+{
+  "name": "wen-alma-market",
+  "plugins": [
+    {
+      "name": "wen-alma",
+      "source": "./plugins/wen-alma",
+      "version": "0.1.0",
+      "description": "wen-engineering flow on Alma built-in agents: grill to converge requirements, cold-start tickets on the repo's own tracker, isolated-context implement with independent runtime-evidence acceptance",
+      "displayName": "Wen Alma",
+      "displayName_i18n": { "zh-CN": "Wen Alma 工程流" },
+      "description_i18n": { "zh-CN": "wen-engineering 流程 × Alma 内置 agents：grill 收敛需求、PRD Inventory 守门、冷启动票、隔离 context 实现 + 独立运行时证据验收" },
+      "category": "developer-tools"
+    }
+  ]
+}

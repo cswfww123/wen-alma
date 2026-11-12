@@ -1,0 +1,1 @@
+Run the **wen-tickets** skill (wen-alma plugin) on the settled requirements in this conversation: read THIS repo's tracker config via its AGENTS.md router, dispatch the planner agent with the cold-start ticket standard, publish, and read every ticket back.

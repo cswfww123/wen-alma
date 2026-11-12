@@ -1,0 +1,8 @@
+{
+  "name": "wen-alma",
+  "version": "0.1.0",
+  "description": "wen-engineering flow on Alma built-in agents: grill to converge requirements, cold-start tickets on the repo's own tracker, isolated-context implement with independent runtime-evidence acceptance",
+  "author": { "name": "wen-alma" },
+  "skills": "./skills",
+  "commands": "./commands"
+}
